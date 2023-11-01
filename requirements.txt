@@ -1,0 +1,11 @@
+certifi==2023.7.22
+charset-normalizer==3.3.0
+idna==3.4
+MailTm==0.0.81
+PyQt5==5.15.10
+PyQt5-Qt5==5.15.11
+PyQt5-sip==12.13.0
+PyQtWebEngine==5.15.6
+PyQtWebEngine-Qt5==5.15.2
+requests==2.31.0
+urllib3==2.0.7
