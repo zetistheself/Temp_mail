@@ -20,12 +20,14 @@ from PyQt5.QtGui import *
     
 
 class MailCheckThread(QThread):
+    founded = pyqtSignal()
     def __init__(self, mainwindow):
         super().__init__()
         self.mainwindow = mainwindow
 
     def run(self):
         while True:
+            print('working')
             if self.mainwindow.proc_exec == False:
                 address = self.mainwindow.mail.address
                 param = {
@@ -55,14 +57,10 @@ class MailCheckThread(QThread):
                                     with open(f'cache/{self.mainwindow.message_count + 1}.html', 'w') as f:
                                         f.write(html)
                                 self.mainwindow.message_count += between
-                                self.mainwindow.empty_mail_icon.hide()
-                                self.mainwindow.empty_mail_label.hide()
-                                self.mainwindow.textBrowser.show()
-                                self.mainwindow.scroll.show()
                                 if self.mainwindow.message_count <= 8:
                                     if  self.mainwindow.message_count == 1:
-                                        self.mainwindow.message_button_1.show()
-                                    elif  self.mainwindow.message_count == 2:
+                                        self.founded.emit()
+                                    elif self.mainwindow.message_count == 2:
                                         self.mainwindow.message_button_1.show()
                                     elif  self.mainwindow.message_count == 3:
                                         self.mainwindow.message_button_1.show()
@@ -106,6 +104,7 @@ class MainWindow(QMainWindow):
             self.message_count = 0
             self.mailthread = MailCheckThread(self)
             self.mailthread.start()
+            self.mailthread.founded.connect(self.mytest)
             self.message_button_1.clicked.connect(lambda: self.show_message('test.html'))
             self.copy_button.clicked.connect(self.copy)
             self.copy_button.setToolTip('Click To Copy!📍')
@@ -126,7 +125,13 @@ class MainWindow(QMainWindow):
         else:
             time.sleep(1)
             self.__init__()
-
+    
+    def mytest(self):
+        self.message_button_1.show()
+        self.scroll.show()
+        self.empty_mail_icon.hide()
+        self.empty_mail_label.hide()
+        self.textBrowser.show()
 
     def show_message(self, file_name):
         html_file = open('test.html', encoding='utf-8')
