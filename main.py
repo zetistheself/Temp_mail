@@ -7,18 +7,40 @@ import time
 import shutil
 
 
-from PyQt5 import QtCore, uic
+from PyQt5 import QtCore, uic, QtNetwork
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 import typing
 from PyQt5 import QtCore, QtWidgets, QtWebEngineWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtWebEngineWidgets import *
 from PyQt5.QtWidgets import (QWidget, QSlider, QLineEdit, QLabel, QPushButton, QScrollArea,QApplication,
-                             QHBoxLayout, QVBoxLayout, QMainWindow, QGraphicsOpacityEffect)
+                             QHBoxLayout, QVBoxLayout, QMainWindow, QGraphicsOpacityEffect, QDialog)
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
+
+
+class CheckConnectivity(QtCore.QObject):
+    def __init__(self):
+        try:
+            r = requests.get("https://www.google.com/")
+            ex = MainWindow()
+            ex.show()
+        except:
+            ex = InternetLose()
+            ex.show()
+
+
+class InternetLose(QDialog):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('internet_lose.ui', self)
+        self.pushButton.clicked.connect(self.exit)
+        self.label_2.setPixmap(QPixmap('images/connection_lose_image'))
     
+    def exit(self):
+        sys.exit()
+
 
 class MailCheckThread(QThread):
     founded = pyqtSignal()
@@ -166,15 +188,8 @@ class MainWindow(QMainWindow):
         shutil.rmtree('cache')
         os.mkdir('cache')
 
-    def close(self):
-        app.exec_()
-        self.proc_exec = True
-        self.clear_cache()
-
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = MainWindow()
-    ex.show()
-    sys.exit(ex.close())
+    ic = CheckConnectivity()
+    sys.exit(app.exec_())

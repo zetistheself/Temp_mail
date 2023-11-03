@@ -16,11 +16,21 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>250</x>
+     <x>270</x>
      <y>310</y>
-     <width>90</width>
-     <height>30</height>
+     <width>51</width>
+     <height>41</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Chalkboard</family>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-radius: 20px;
+background-color: black;
+color: white</string>
    </property>
    <property name="text">
     <string>OK</string>
@@ -29,14 +39,15 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>180</x>
-     <y>10</y>
+     <x>170</x>
+     <y>30</y>
      <width>251</width>
      <height>61</height>
     </rect>
    </property>
    <property name="font">
     <font>
+     <family>Chalkboard</family>
      <pointsize>20</pointsize>
      <weight>75</weight>
      <bold>true</bold>
@@ -61,9 +72,9 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>190</x>
-     <y>80</y>
-     <width>221</width>
+     <x>200</x>
+     <y>90</y>
+     <width>191</width>
      <height>191</height>
     </rect>
    </property>
