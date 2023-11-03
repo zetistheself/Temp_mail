@@ -17,6 +17,7 @@ from PyQt5.QtWidgets import (QWidget, QSlider, QLineEdit, QLabel, QPushButton, Q
                              QHBoxLayout, QVBoxLayout, QMainWindow, QGraphicsOpacityEffect)
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
+from PyQt5.QtCore import Qt
     
 
 class MailCheckThread(QThread):
@@ -27,7 +28,6 @@ class MailCheckThread(QThread):
 
     def run(self):
         while True:
-            print('working')
             if self.mainwindow.proc_exec == False:
                 address = self.mainwindow.mail.address
                 param = {
@@ -51,29 +51,26 @@ class MailCheckThread(QThread):
                                 id = mails['hydra:member'][message]['id']
                                 r = requests.get(f'https://api.mail.tm/messages/{id}', headers=header)
                                 if r.status_code == 200:
-                                    x = json.dumps(r.json())
-                                    y = json.loads(x)
-                                    html = '<HTML><BODY><meta charset="utf-8">' + str(y['html'][0])[y['html'][0].find('<BODY>') + 6:]
+                                    json_dumps = json.dumps(r.json())
+                                    json_text = json.loads(json_dumps)
+                                    html = '<HTML><BODY><meta charset="utf-8">' + str(json_text['html'][0])[json_text['html'][0].find('<BODY>') + 6:]
                                     with open(f'cache/{self.mainwindow.message_count + 1}.html', 'w') as f:
                                         f.write(html)
+                                print(json_text)
                                 self.mainwindow.message_count += between
-                                if self.mainwindow.message_count <= 8:
-                                    if  self.mainwindow.message_count == 1:
-                                        self.founded.emit()
-                                    elif self.mainwindow.message_count == 2:
-                                        self.mainwindow.message_button_1.show()
-                                    elif  self.mainwindow.message_count == 3:
-                                        self.mainwindow.message_button_1.show()
-                                    elif  self.mainwindow.message_count == 4:
-                                        self.mainwindow.message_button_1.show()
-                                    elif  self.mainwindow.message_count == 5:
-                                        self.mainwindow.message_button_1.show()
-                                    elif  self.mainwindow.message_count == 6:
-                                        self.mainwindow.message_button_1.show()
-                                    elif  self.mainwindow.message_count == 7:
-                                        self.mainwindow.message_button_1.show()
-                                    elif  self.mainwindow.message_count == 8:
-                                        self.mainwindow.message_button_1.show()
+                                from_address = json_text['from']['address']
+                                from_name = json_text['from']['name']
+                                receaved_at = json_text['createdAt']
+                                file_name = f'{self.mainwindow.message_count}.html'
+                                subject = json_text['subject']
+                                self.mainwindow.hydra.append({
+                                    'from_address': from_address,
+                                    'from_name': from_name,
+                                    'receaved_at': receaved_at,
+                                    'file_name': file_name,
+                                    'subject': subject,
+                                })
+                                self.founded.emit()
                     else:
                         pass
             else:
@@ -89,12 +86,16 @@ class MainWindow(QMainWindow):
         uic.loadUi('uci.ui', self)
         self.too_fast_label.setText('')
         self.mail = Email()
+        self.hydra = []
         self.mail.register(password="nonepassword")
         param = {
             "address": self.mail.address,
             "password": "nonepassword"
             }
         self.first_message = True
+        self.vbox = QVBoxLayout(self) 
+        self.scroll.setWidgetResizable(True)
+        self.vbox.setAlignment(Qt.AlignTop)
         r = requests.post('https://api.mail.tm/token', json=param)
         if r.status_code == 200:
             x = json.dumps(r.json())
@@ -105,18 +106,9 @@ class MainWindow(QMainWindow):
             self.mailthread = MailCheckThread(self)
             self.mailthread.start()
             self.mailthread.founded.connect(self.mytest)
-            self.message_button_1.clicked.connect(lambda: self.show_message('test.html'))
             self.copy_button.clicked.connect(self.copy)
             self.copy_button.setToolTip('Click To Copy!📍')
             self.RefreshButton.clicked.connect(self.refresh)
-            self.message_button_1.hide()
-            self.message_button_2.hide()
-            self.message_button_3.hide()
-            self.message_button_4.hide()
-            self.message_button_5.hide()
-            self.message_button_6.hide()
-            self.message_button_7.hide()
-            self.message_button_8.hide()
             self.scroll.hide()
             self.textBrowser.hide()
             self.opacity_effect = QGraphicsOpacityEffect()
@@ -127,16 +119,23 @@ class MainWindow(QMainWindow):
             self.__init__()
     
     def mytest(self):
-        self.message_button_1.show()
         self.scroll.show()
         self.empty_mail_icon.hide()
         self.empty_mail_label.hide()
         self.textBrowser.show()
+        self.widget = QWidget()
+        for message in range(len(self.hydra) - 1, -1, -1):
+            button = QPushButton(f'{self.hydra[message]["subject"]}\nFROM: {self.hydra[message]["from_address"]}')
+            button.clicked.connect(lambda: self.show_message("cache/" + self.hydra[message]["file_name"]))
+            button.setMinimumHeight(100)
+            button.setStyleSheet("QPushButton { text-align: left; }")
+            self.vbox.addWidget(button)
+            self.widget.setLayout(self.vbox)
+            self.scroll.setWidget(self.widget)
 
     def show_message(self, file_name):
         html_file = open('test.html', encoding='utf-8')
         path = os.path.abspath(file_name)
-        print(path)
         self.textBrowser.setUrl(QUrl(f'file:{path}'))
         html_file.close()
 

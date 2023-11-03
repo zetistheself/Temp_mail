@@ -156,237 +156,26 @@
        <height>629</height>
       </rect>
      </property>
-     <widget class="QPushButton" name="message_button_1">
+     <widget class="QWidget" name="widget" native="true">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
         <width>261</width>
-        <height>81</height>
+        <height>621</height>
        </rect>
       </property>
-      <property name="font">
-       <font>
-        <family>Monaco</family>
-       </font>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">text-align:left</string>
-      </property>
-      <property name="text">
-       <string>First mails words
-Theme:  sdfgsdfgdfg
-From: dfsdfg@ecxelica.com</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="message_button_2">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>80</y>
-        <width>261</width>
-        <height>81</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Monaco</family>
-       </font>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">text-align:left</string>
-      </property>
-      <property name="text">
-       <string>First mails words
-Theme:  sdfgsdfgdfg
-From: dfsdfg@ecxelica.com</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="message_button_3">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>160</y>
-        <width>261</width>
-        <height>81</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Monaco</family>
-       </font>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">text-align:left</string>
-      </property>
-      <property name="text">
-       <string>First mails words
-Theme:  sdfgsdfgdfg
-From: dfsdfg@ecxelica.com</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="message_button_4">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>240</y>
-        <width>261</width>
-        <height>81</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Monaco</family>
-       </font>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">text-align:left</string>
-      </property>
-      <property name="text">
-       <string>First mails words
-Theme:  sdfgsdfgdfg
-From: dfsdfg@ecxelica.com</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="message_button_5">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>320</y>
-        <width>261</width>
-        <height>81</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Monaco</family>
-       </font>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">text-align:left</string>
-      </property>
-      <property name="text">
-       <string>First mails words
-Theme:  sdfgsdfgdfg
-From: dfsdfg@ecxelica.com</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="message_button_6">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>400</y>
-        <width>261</width>
-        <height>81</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Monaco</family>
-       </font>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">text-align:left</string>
-      </property>
-      <property name="text">
-       <string>First mails words
-Theme:  sdfgsdfgdfg
-From: dfsdfg@ecxelica.com</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="message_button_7">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>480</y>
-        <width>261</width>
-        <height>81</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Monaco</family>
-       </font>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">text-align:left</string>
-      </property>
-      <property name="text">
-       <string>First mails words
-Theme:  sdfgsdfgdfg
-From: dfsdfg@ecxelica.com</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="message_button_8">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>560</y>
-        <width>261</width>
-        <height>81</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Monaco</family>
-       </font>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">text-align:left</string>
-      </property>
-      <property name="text">
-       <string>First mails words
-Theme:  sdfgsdfgdfg
-From: dfsdfg@ecxelica.com</string>
-      </property>
+      <widget class="QWidget" name="verticalLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>261</width>
+         <height>621</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="vbox"/>
+      </widget>
      </widget>
     </widget>
    </widget>
