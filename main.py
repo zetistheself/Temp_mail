@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtWidgets, QtWebEngineWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtWebEngineWidgets import *
 from PyQt5.QtWidgets import (QWidget, QSlider, QLineEdit, QLabel, QPushButton, QScrollArea,QApplication,
-                             QHBoxLayout, QVBoxLayout, QMainWindow, QGraphicsOpacityEffect, QDialog)
+                             QHBoxLayout, QVBoxLayout, QMainWindow, QGraphicsOpacityEffect, QDialog, QMessageBox)
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
@@ -25,18 +25,25 @@ class Ui_Dialog(object):
         Dialog.setObjectName("Dialog")
         Dialog.resize(600, 400)
         self.pushButton = QtWidgets.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(270, 310, 51, 41))
+        self.pushButton.setGeometry(QtCore.QRect(260, 320, 81, 31))
         font = QtGui.QFont()
         font.setFamily("Chalkboard")
         self.pushButton.setFont(font)
-        self.pushButton.setStyleSheet("border-radius: 20px;\n"
-"background-color: black;\n"
-"color: white")
+        self.pushButton.setStyleSheet("*{\n"
+"    color: black;\n"
+"    background-color: white;\n"
+"    border-radius: 8px;\n"
+"    border: 3px;\n"
+"    border-color: solid black;\n"
+"}\n"
+"*:hover{\n"
+"    background-color: rgb(26, 111, 250);\n"
+"    color:white;\n"
+"}")
         self.pushButton.setObjectName("pushButton")
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(170, 30, 251, 61))
         font = QtGui.QFont()
-        font.setFamily("Chalkboard")
         font.setPointSize(20)
         font.setBold(True)
         font.setWeight(75)
@@ -158,12 +165,8 @@ class Ui_Temp_Mail(object):
         font.setPointSize(60)
         self.empty_mail_label.setFont(font)
         self.empty_mail_label.setObjectName("empty_mail_label")
-        self.empty_mail_icon = QtWidgets.QLabel(self.centralwidget)
-        self.empty_mail_icon.setGeometry(QtCore.QRect(540, 330, 221, 211))
         font = QtGui.QFont()
         font.setPointSize(200)
-        self.empty_mail_icon.setFont(font)
-        self.empty_mail_icon.setObjectName("empty_mail_icon")
         Temp_Mail.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(Temp_Mail)
@@ -178,7 +181,42 @@ class Ui_Temp_Mail(object):
         self.too_fast_label.setText(_translate("Temp_Mail", "Too fast!"))
         self.empty_mail_label.setText(_translate("Temp_Mail", "              Your email is empty.\n"
 "Try to make some friend in real life."))
-        self.empty_mail_icon.setText(_translate("Temp_Mail", "📭"))
+
+
+class ExitingUi(object):
+    def setupUi(self, Dialog):
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(419, 222)
+        self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
+        self.buttonBox.setGeometry(QtCore.QRect(120, 130, 171, 41))
+        self.buttonBox.setStyleSheet("*{\n"
+"    background-color: white;\n"
+"    color: black;\n"
+"}\n"
+"*:hover{\n"
+"    background-color: rgb(31, 116, 252);\n"
+"    color: white\n"
+"}")
+        self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
+        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+        self.buttonBox.setObjectName("buttonBox")
+        self.label = QtWidgets.QLabel(Dialog)
+        self.label.setGeometry(QtCore.QRect(30, 20, 361, 101))
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        self.label.setFont(font)
+        self.label.setObjectName("label")
+
+        self.retranslateUi(Dialog)
+        self.buttonBox.accepted.connect(Dialog.accept) # type: ignore
+        self.buttonBox.rejected.connect(Dialog.reject) # type: ignore
+        QtCore.QMetaObject.connectSlotsByName(Dialog)
+
+    def retranslateUi(self, Dialog):
+        _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        self.label.setText(_translate("Dialog", "Are you sure that you want to exit the programm?\n"
+"       All of yours messages will be deleted!"))
 
 
 class CheckConnectivity(QtCore.QObject):
@@ -190,6 +228,20 @@ class CheckConnectivity(QtCore.QObject):
         except:
             ex = InternetLose()
             ex.show()
+
+
+class ExitingDialog(QDialog, ExitingUi):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.buttonBox.accepted.connect(self.accepted)
+        self.buttonBox.rejected.connect(self.rejected)
+    
+    def accepted(self):
+        self.clear_cache()
+    
+    def rejected(self):
+        pass
 
 
 class InternetLose(QDialog, Ui_Dialog):
@@ -268,7 +320,7 @@ class MainWindow(QMainWindow, Ui_Temp_Mail):
     def __init__(self):
         self.clear_cache()
         super().__init__()
-        self.setupUi(self)
+        uic.loadUi('uci.ui', self)
         self.too_fast_label.setText('')
         self.mail = Email()
         self.hydra = []
@@ -306,7 +358,6 @@ class MainWindow(QMainWindow, Ui_Temp_Mail):
     def create_button(self):
         print(self.hydra)
         self.scroll.show()
-        self.empty_mail_icon.hide()
         self.empty_mail_label.hide()
         self.textBrowser.show()
         self.widget.deleteLater()
@@ -321,7 +372,7 @@ class MainWindow(QMainWindow, Ui_Temp_Mail):
             button.setToolTip(str(message))
             button.setToolTipDuration(0)
             button.setMaximumWidth(270)
-            button.setStyleSheet("QPushButton { text-align: left; }")
+            button.setStyleSheet("QPushButton { text-align: left;\nbackground-color: rgb(24, 30, 41);\ncolor: white;\nborder-radius: 5px;\nborder: 2px;\nborder-color: solid white;}")
             self.vbox.addWidget(button)
             self.widget.setLayout(self.vbox)
             self.scroll.setWidget(self.widget)
@@ -356,7 +407,6 @@ class MainWindow(QMainWindow, Ui_Temp_Mail):
             self.clear_cache()
             self.scroll.hide()
             self.textBrowser.hide()
-            self.empty_mail_icon.show()
             self.empty_mail_label.show()
         except Exception:
             self.too_fast_label.setText('Too fast!')
@@ -366,6 +416,10 @@ class MainWindow(QMainWindow, Ui_Temp_Mail):
         cb.clear()
         cb.setText(self.mail.address)
     
+    def closeEvent(self, event):
+        window = ExitingDialog()
+        window.show()
+
     def clear_cache(self):
         shutil.rmtree('cache')
         os.mkdir('cache')
@@ -373,6 +427,5 @@ class MainWindow(QMainWindow, Ui_Temp_Mail):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ic = MainWindow()
-    ic.show()
+    ic = CheckConnectivity()
     sys.exit(app.exec_())

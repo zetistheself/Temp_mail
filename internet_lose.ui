@@ -16,10 +16,10 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>310</y>
-     <width>51</width>
-     <height>41</height>
+     <x>260</x>
+     <y>320</y>
+     <width>81</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -28,9 +28,17 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-radius: 20px;
-background-color: black;
-color: white</string>
+    <string notr="true">*{
+	color: black;
+	background-color: white;
+	border-radius: 8px;
+	border: 3px;
+	border-color: solid black;
+}
+*:hover{
+	background-color: rgb(26, 111, 250);
+	color:white;
+}</string>
    </property>
    <property name="text">
     <string>OK</string>
@@ -47,7 +55,6 @@ color: white</string>
    </property>
    <property name="font">
     <font>
-     <family>Chalkboard</family>
      <pointsize>20</pointsize>
      <weight>75</weight>
      <bold>true</bold>
@@ -82,7 +89,7 @@ color: white</string>
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="images/1496957-200.qrc">:/newPrefix/1496957-200.png</pixmap>
+    <pixmap>:/newPrefix/1496957-200.png</pixmap>
    </property>
   </widget>
  </widget>
