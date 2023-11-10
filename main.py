@@ -320,7 +320,7 @@ class MainWindow(QMainWindow, Ui_Temp_Mail):
     def __init__(self):
         self.clear_cache()
         super().__init__()
-        uic.loadUi('uci.ui', self)
+        self.setupUi(self)
         self.too_fast_label.setText('')
         self.mail = Email()
         self.hydra = []
