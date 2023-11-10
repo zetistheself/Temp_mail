@@ -237,8 +237,8 @@ background-color: rgb(26, 26, 36)</string>
    <widget class="QLabel" name="empty_mail_label">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>300</y>
+      <x>250</x>
+      <y>280</y>
       <width>921</width>
       <height>151</height>
      </rect>
@@ -252,8 +252,7 @@ background-color: rgb(26, 26, 36)</string>
      <string notr="true">color: white</string>
     </property>
     <property name="text">
-     <string>              Your email is empty.
-Try to make some friend in real life.</string>
+     <string>              Your email is empty.</string>
     </property>
    </widget>
   </widget>

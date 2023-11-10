@@ -5,6 +5,7 @@ import requests
 import json
 import time
 import shutil
+import threading
 
 
 from PyQt5 import QtCore, uic, QtNetwork
@@ -18,6 +19,7 @@ from PyQt5.QtWidgets import (QWidget, QSlider, QLineEdit, QLabel, QPushButton, Q
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
+
 
 
 class Ui_Dialog(object):
@@ -73,16 +75,17 @@ class Ui_Temp_Mail(object):
     def setupUi(self, Temp_Mail):
         Temp_Mail.setObjectName("Temp_Mail")
         Temp_Mail.resize(1313, 686)
+        Temp_Mail.setStyleSheet("background-color: rgb(14, 18, 29)")
         Temp_Mail.setInputMethodHints(QtCore.Qt.ImhNone)
         self.centralwidget = QtWidgets.QWidget(Temp_Mail)
         self.centralwidget.setObjectName("centralwidget")
         self.textBrowser = QtWebEngineWidgets.QWebEngineView(self.centralwidget)
-        self.textBrowser.setGeometry(QtCore.QRect(320, 150, 991, 621))
+        self.textBrowser.setGeometry(QtCore.QRect(320, 60, 981, 611))
         font = QtGui.QFont()
         font.setFamily("Monaco")
         self.textBrowser.setFont(font)
         self.textBrowser.setAccessibleName("")
-        self.textBrowser.setStyleSheet("border: 2px, solid black")
+        self.textBrowser.setStyleSheet("")
         self.textBrowser.setObjectName("textBrowser")
         self.Inbox_text = QtWidgets.QLabel(self.centralwidget)
         self.Inbox_text.setGeometry(QtCore.QRect(0, 10, 321, 51))
@@ -91,11 +94,12 @@ class Ui_Temp_Mail(object):
         font.setPointSize(25)
         self.Inbox_text.setFont(font)
         self.Inbox_text.setToolTip("")
-        self.Inbox_text.setStyleSheet("")
+        self.Inbox_text.setStyleSheet("color:white;\n"
+"border: 2px, solid white")
         self.Inbox_text.setAlignment(QtCore.Qt.AlignCenter)
         self.Inbox_text.setObjectName("Inbox_text")
         self.RefreshButton = QtWidgets.QPushButton(self.centralwidget)
-        self.RefreshButton.setGeometry(QtCore.QRect(1180, 0, 71, 61))
+        self.RefreshButton.setGeometry(QtCore.QRect(1180, 0, 71, 60))
         font = QtGui.QFont()
         font.setFamily("Monaco")
         font.setPointSize(40)
@@ -104,7 +108,7 @@ class Ui_Temp_Mail(object):
         self.RefreshButton.setStyleSheet("border-radius: 0px;")
         self.RefreshButton.setObjectName("RefreshButton")
         self.too_fast_label = QtWidgets.QLabel(self.centralwidget)
-        self.too_fast_label.setGeometry(QtCore.QRect(1070, 20, 131, 21))
+        self.too_fast_label.setGeometry(QtCore.QRect(1070, 20, 121, 21))
         font = QtGui.QFont()
         font.setFamily("Monaco")
         font.setPointSize(20)
@@ -114,14 +118,16 @@ class Ui_Temp_Mail(object):
         font.setWeight(75)
         font.setStrikeOut(False)
         self.too_fast_label.setFont(font)
-        self.too_fast_label.setStyleSheet("color: red;")
+        self.too_fast_label.setStyleSheet("color: white;")
         self.too_fast_label.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
         self.too_fast_label.setObjectName("too_fast_label")
         self.scroll = QtWidgets.QScrollArea(self.centralwidget)
-        self.scroll.setGeometry(QtCore.QRect(20, 50, 281, 621))
+        self.scroll.setGeometry(QtCore.QRect(10, 60, 301, 611))
         font = QtGui.QFont()
         font.setFamily("Monaco")
         self.scroll.setFont(font)
+        self.scroll.setStyleSheet("\n"
+"background-color: rgb(31, 33, 48)")
         self.scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.scroll.setWidgetResizable(False)
@@ -130,10 +136,10 @@ class Ui_Temp_Mail(object):
         self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 259, 629))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.widget = QtWidgets.QWidget(self.scrollAreaWidgetContents)
-        self.widget.setGeometry(QtCore.QRect(0, 0, 261, 621))
+        self.widget.setGeometry(QtCore.QRect(0, 10, 261, 611))
         self.widget.setObjectName("widget")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.widget)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 261, 621))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 271, 621))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.vbox = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.vbox.setContentsMargins(0, 0, 0, 0)
@@ -153,20 +159,20 @@ class Ui_Temp_Mail(object):
         self.copy_button.setAccessibleDescription("")
         self.copy_button.setStyleSheet("*{\n"
 "    background-color: rgba(10, 0, 0, 0);\n"
+"    color: white;\n"
 "}\n"
 "*:hover{\n"
-"    color:blue;\n"
+"    color: rgb(57, 99, 182);\n"
 "}")
         self.copy_button.setText("")
         self.copy_button.setObjectName("copy_button")
         self.empty_mail_label = QtWidgets.QLabel(self.centralwidget)
-        self.empty_mail_label.setGeometry(QtCore.QRect(200, 170, 921, 151))
+        self.empty_mail_label.setGeometry(QtCore.QRect(250, 280, 921, 151))
         font = QtGui.QFont()
         font.setPointSize(60)
         self.empty_mail_label.setFont(font)
+        self.empty_mail_label.setStyleSheet("color: white")
         self.empty_mail_label.setObjectName("empty_mail_label")
-        font = QtGui.QFont()
-        font.setPointSize(200)
         Temp_Mail.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(Temp_Mail)
@@ -179,8 +185,7 @@ class Ui_Temp_Mail(object):
         self.RefreshButton.setToolTip(_translate("Temp_Mail", "Get new mail"))
         self.RefreshButton.setText(_translate("Temp_Mail", "🔄"))
         self.too_fast_label.setText(_translate("Temp_Mail", "Too fast!"))
-        self.empty_mail_label.setText(_translate("Temp_Mail", "              Your email is empty.\n"
-"Try to make some friend in real life."))
+        self.empty_mail_label.setText(_translate("Temp_Mail", "              Your email is empty."))
 
 
 class ExitingUi(object):
@@ -366,13 +371,16 @@ class MainWindow(QMainWindow, Ui_Temp_Mail):
         self.vbox.setAlignment(Qt.AlignTop)
         self.scroll.setWidget(self.widget)
         for message in range(len(self.hydra) - 1, -1, -1):
-            button = QPushButton(f'{self.hydra[message]["subject"]}\nFrom: {self.hydra[message]["from_address"]}\nReceaved at: {self.hydra[message]["receaved_at"][:10].split("-")[2]}/{self.hydra[message]["receaved_at"][:10].split("-")[1]}/{self.hydra[message]["receaved_at"][:10].split("-")[0]} ({int(self.hydra[message]["receaved_at"][11:16].split(":")[0]) + 3}:{self.hydra[message]["receaved_at"][11:16].split(":")[1]})')
+            if len(self.hydra[message]['subject']) < 39:
+                button = QPushButton(f'  {self.hydra[message]["subject"]}\n  From: {self.hydra[message]["from_address"]}\n  Receaved at: {self.hydra[message]["receaved_at"][:10].split("-")[2]}/{self.hydra[message]["receaved_at"][:10].split("-")[1]}/{self.hydra[message]["receaved_at"][:10].split("-")[0]} ({int(self.hydra[message]["receaved_at"][11:16].split(":")[0]) + 3}:{self.hydra[message]["receaved_at"][11:16].split(":")[1]})')
+            else:
+                button = QPushButton(f'  {self.hydra[message]["subject"][:37]}...\n  From: {self.hydra[message]["from_address"]}\n  Receaved at: {self.hydra[message]["receaved_at"][:10].split("-")[2]}/{self.hydra[message]["receaved_at"][:10].split("-")[1]}/{self.hydra[message]["receaved_at"][:10].split("-")[0]} ({int(self.hydra[message]["receaved_at"][11:16].split(":")[0]) + 3}:{self.hydra[message]["receaved_at"][11:16].split(":")[1]})')
             button.clicked.connect(self.show_message)
             button.setMinimumHeight(80)
             button.setToolTip(str(message))
             button.setToolTipDuration(0)
-            button.setMaximumWidth(270)
-            button.setStyleSheet("QPushButton { text-align: left;\nbackground-color: rgb(24, 30, 41);\ncolor: white;\nborder-radius: 5px;\nborder: 2px;\nborder-color: solid white;}")
+            button.setMaximumWidth(275)
+            button.setStyleSheet("QPushButton { text-align: left;\nbackground-color: rgb(24, 30, 41);\ncolor: white;\nborder-radius: 5px;\nborder: 2px;\nborder-color: solid white;}\n*::hover { background-color: rgb(104, 110, 121);}")
             self.vbox.addWidget(button)
             self.widget.setLayout(self.vbox)
             self.scroll.setWidget(self.widget)
@@ -403,7 +411,7 @@ class MainWindow(QMainWindow, Ui_Temp_Mail):
             self.show_message()
             self.widget.deleteLater()
             self.widget = QWidget()
-            self.vbox = QVBoxLayout(self) 
+            self.vbox = QVBoxLayout(self)
             self.clear_cache()
             self.scroll.hide()
             self.textBrowser.hide()
@@ -417,6 +425,7 @@ class MainWindow(QMainWindow, Ui_Temp_Mail):
         cb.setText(self.mail.address)
     
     def closeEvent(self, event):
+        self.clear_cache()
         window = ExitingDialog()
         window.show()
 
