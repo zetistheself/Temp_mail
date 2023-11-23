@@ -213,8 +213,8 @@ class ExitingUi(object):
         self.label.setObjectName("label")
 
         self.retranslateUi(Dialog)
-        self.buttonBox.accepted.connect(Dialog.accept) # type: ignore
-        self.buttonBox.rejected.connect(Dialog.reject) # type: ignore
+        self.buttonBox.accepted.connect(Dialog.accept)
+        self.buttonBox.rejected.connect(Dialog.reject) 
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -276,14 +276,14 @@ class MailCheckThread(QThread):
                         "password": "nonepassword"
                     }
                 r = requests.post('https://api.mail.tm/token', json=param)
-                if r.status_code == 200:
+                if 200 <= r.status_code <= 204:
                     x = json.dumps(r.json())
                     y = json.loads(x)
                     header = {
                         "authorization": f'Bearer {y["token"]}'
                     }
                     r = requests.get('https://api.mail.tm/messages', headers=header)
-                    if r.status_code == 200:
+                    if 200 <= r.status_code <= 204:
                         mails = json.loads(r.text)
                     else:
                         print('error')
@@ -294,7 +294,7 @@ class MailCheckThread(QThread):
                             for message in range(0, between):
                                 id = mails['hydra:member'][message]['id']
                                 r = requests.get(f'https://api.mail.tm/messages/{id}', headers=header)
-                                if r.status_code == 200:
+                                if 200 <= r.status_code <= 204:
                                     json_dumps = json.dumps(r.json())
                                     json_text = json.loads(json_dumps)
                                     html = '<HTML><BODY><meta charset="utf-8">' + str(json_text['html'][0])[json_text['html'][0].find('<BODY>') + 6:]
