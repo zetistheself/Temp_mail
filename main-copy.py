@@ -6,7 +6,6 @@ import json
 import time
 import shutil
 import threading
-import sqlite3
 
 
 from PyQt5 import QtCore, uic, QtNetwork
@@ -85,7 +84,7 @@ class Ui_Temp_Mail(object):
         font.setFamily("Monaco")
         self.textBrowser.setFont(font)
         self.textBrowser.setAccessibleName("")
-        self.textBrowser.setStyleSheet("background-color: rgb(255, 255, 255)")
+        self.textBrowser.setStyleSheet("background-color: rgb(0, 0, 0)")
         self.textBrowser.setObjectName("textBrowser")
         self.Inbox_text = QtWidgets.QLabel(self.centralwidget)
         self.Inbox_text.setGeometry(QtCore.QRect(0, 10, 321, 51))
@@ -309,13 +308,9 @@ class MailCheckThread(QThread):
                                     receaved_at = json_text['createdAt']
                                     file_name = f'{self.mainwindow.message_count}.html'
                                     subject = json_text['subject']
-                                    self.mainwindow.hydra.append({
-                                        'from_address': from_address,
-                                        'from_name': from_name,
-                                        'receaved_at': receaved_at,
-                                        'file_name': file_name,
-                                        'subject': subject,
-                                    })
+                                    self.mainwindow.cur.execute(
+                                        f"INSERT INTO db  VALUES({from_address}, {from_name}, {receaved_at}, {file_name}, {subject})")
+                                    self.mainwindow.db.commit()
                                 self.founded.emit()
                     else:
                         pass
@@ -331,7 +326,8 @@ class MainWindow(QMainWindow, Ui_Temp_Mail):
         self.setupUi(self)
         self.too_fast_label.setText('')
         self.mail = Email()
-        self.hydra = []
+        self.db = sqlite3.connect('db.sqlite3')
+        self.cur = sqlite3.Cursor()
         self.mail.register(password="nonepassword")
         param = {
             "address": self.mail.address,
@@ -393,13 +389,20 @@ class MainWindow(QMainWindow, Ui_Temp_Mail):
             self.scroll.setWidget(self.widget)
 
     def show_message(self):
+        data = self.cur.execute("SELECT * FROM db")
+        print(data)
         if self.hydra == []:
             path = os.path.abspath(f'clear.html')
             self.textBrowser.setUrl(QUrl(f'file:{path}'))
             return
-        sender = self.sender().toolTip()
-        path = os.path.abspath(f'cache/{int(sender) + 1}.html')
-        self.textBrowser.setUrl(QUrl(f'file:{path}'))
+        if self.was_refreshed == False:
+            sender = self.sender().toolTip()
+            path = os.path.abspath(f'cache/{int(sender) + 1}.html')
+            self.textBrowser.setUrl(QUrl(f'file:{path}'))
+        else:
+            sender = self.sender().toolTip()
+            path = os.path.abspath(f'cache/{int(sender)}.html')
+            self.textBrowser.setUrl(QUrl(f'file:{path}'))
 
     def refresh(self):
         try:
