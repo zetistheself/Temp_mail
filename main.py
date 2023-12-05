@@ -5,8 +5,6 @@ import requests
 import json
 import time
 import shutil
-import threading
-import sqlite3
 
 
 from PyQt5 import QtCore, uic, QtNetwork
@@ -254,12 +252,13 @@ class InternetLose(QDialog, Ui_Dialog):
         super().__init__()
         self.setupUi(self)
         self.pushButton.clicked.connect(self.exit)
-        self.label_2.setPixmap(QPixmap('images/connection_lose_image'))
+        self.label_2.setPixmap(QPixmap(r'images/connection_lose_image'))
 
     def exit(self):
         sys.exit()
 
 
+#Отдельный поток для провекри сообщений
 class MailCheckThread(QThread):
     founded = pyqtSignal()
 
@@ -301,7 +300,7 @@ class MailCheckThread(QThread):
                                     html = '<HTML><BODY><meta charset="utf-8">' + str(json_text['html'][0])[
                                                                                   json_text['html'][0].find(
                                                                                       '<BODY>') + 6:]
-                                    with open(f'cache/{self.mainwindow.message_count + 1}.html', 'w') as f:
+                                    with open(fr'cache/{self.mainwindow.message_count + 1}.html', 'w') as f:
                                         f.write(html)
                                     self.mainwindow.message_count += 1
                                     from_address = json_text['from']['address']
@@ -326,6 +325,10 @@ class MailCheckThread(QThread):
 
 class MainWindow(QMainWindow, Ui_Temp_Mail):
     def __init__(self):
+        try:
+            os.mkdir('cache')
+        except:
+            pass
         self.clear_cache()
         super().__init__()
         self.setupUi(self)
@@ -398,7 +401,7 @@ class MainWindow(QMainWindow, Ui_Temp_Mail):
             self.textBrowser.setUrl(QUrl(f'file:{path}'))
             return
         sender = self.sender().toolTip()
-        path = os.path.abspath(f'cache/{int(sender) + 1}.html')
+        path = os.path.abspath(fr'cache/{int(sender) + 1}.html')
         self.textBrowser.setUrl(QUrl(f'file:{path}'))
 
     def refresh(self):
