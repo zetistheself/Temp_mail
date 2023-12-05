@@ -402,7 +402,7 @@ class MainWindow(QMainWindow, Ui_Temp_Mail):
             return
         sender = self.sender().toolTip()
         path = os.path.abspath(fr'cache/{int(sender) + 1}.html')
-        self.textBrowser.setUrl(QUrl(f'file:{path}'))
+        self.textBrowser.setUrl(QUrl(f'file://{path}'))
 
     def refresh(self):
         try:
